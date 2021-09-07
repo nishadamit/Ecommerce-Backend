@@ -1,6 +1,12 @@
 const User = require('../models/user');
+const { validationResult } = require('express-validator');
 
 exports.signUp = async(req,res) =>{
+
+    const errors = await validationResult(req);
+
+    return res.status(400).json({errors:errors.array()})
+
     const user = await User.findOne({email:req.body.email});
     if(user){
        return res.status(400).json({message:"User already registered."})
